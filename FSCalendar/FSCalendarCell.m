@@ -154,6 +154,8 @@ self.fs_width, \
 titleHeight); \
 \
 _imageView.frame = _titleLabel.frame;\
+_noteImageView.frame = CGRectMake(_imageView.frame.size.width / 2 - 15 - 8, _imageView.frame.size.height / 2 - 15 - 8, 16, 16);\
+_intimateImageView.frame = CGRectMake(_imageView.frame.size.width / 2 + 15 - 8, _imageView.frame.size.height / 2 - 15 - 8, 16, 16);\
 _subtitleLabel.frame = CGRectMake(0, \
 _titleLabel.fs_bottom - (_titleLabel.fs_height-_titleLabel.font.pointSize),\
 self.fs_width,\
@@ -162,6 +164,8 @@ _subtitleLabel.textColor = self.colorForSubtitleLabel; \
 } else { \
 _titleLabel.frame = CGRectMake(0, 0, self.fs_width, floor(self.contentView.fs_height*5.0/6.0)); \
 _imageView.frame = _titleLabel.frame;\
+_noteImageView.frame = CGRectMake(_imageView.frame.size.width / 2 - 15 - 8, _imageView.frame.size.height / 2 - 15 - 8, 16, 16);\
+_intimateImageView.frame = CGRectMake(_imageView.frame.size.width / 2 + 15 - 8, _imageView.frame.size.height / 2 - 15 - 8, 16, 16);\
 _subtitleLabel.hidden = YES; \
 }
     
