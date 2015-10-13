@@ -18,6 +18,10 @@
 @property (weak, nonatomic) UILabel  *subtitleLabel;
 @property (weak, nonatomic) UIImageView *imageView;
 
+@property (weak, nonatomic) UIImageView *intimateImageView;
+@property (weak, nonatomic) UIImageView *noteImageView;
+//@property (weak, nonatomic) UIImageView *intimateImageView;
+
 @property (weak, nonatomic) CAShapeLayer *backgroundLayer;
 @property (weak, nonatomic) CAShapeLayer *eventLayer;
 

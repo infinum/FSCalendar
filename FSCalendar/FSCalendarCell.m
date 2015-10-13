@@ -59,7 +59,7 @@
         self.eventLayer = eventLayer;
         
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectZero];
-        imageView.contentMode = UIViewContentModeBottom|UIViewContentModeCenter;
+        imageView.contentMode = UIViewContentModeTop;
         [self.contentView addSubview:imageView];
         self.imageView = imageView;
         
