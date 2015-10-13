@@ -32,7 +32,7 @@
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         titleLabel.textAlignment = NSTextAlignmentCenter;
-        titleLabel.font = [UIFont systemFontOfSize:14];
+        titleLabel.font = [UIFont systemFontOfSize:13];
         titleLabel.textColor = [UIColor darkTextColor];
         [self.contentView addSubview:titleLabel];
         self.titleLabel = titleLabel;
@@ -63,6 +63,16 @@
         [self.contentView addSubview:imageView];
         self.imageView = imageView;
         
+        UIImageView *intimateImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
+        intimateImageView.contentMode = UIViewContentModeCenter;
+        [self.contentView addSubview:intimateImageView];
+        self.intimateImageView = intimateImageView;
+        
+        UIImageView *noteImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
+        noteImageView.contentMode = UIViewContentModeCenter;
+        [self.contentView addSubview:noteImageView];
+        self.noteImageView = noteImageView;
+        
         self.clipsToBounds = NO;
         self.contentView.clipsToBounds = NO;
     }
@@ -82,7 +92,6 @@
     CGFloat eventSize = _backgroundLayer.frame.size.height/6.0;
     _eventLayer.frame = CGRectMake((_backgroundLayer.frame.size.width-eventSize)/2+_backgroundLayer.frame.origin.x, CGRectGetMaxY(_backgroundLayer.frame)+eventSize*0.2, eventSize*0.8, eventSize*0.8);
     _eventLayer.path = [UIBezierPath bezierPathWithOvalInRect:_eventLayer.bounds].CGPath;
-    _imageView.frame = self.contentView.bounds;
 }
 
 - (void)layoutSubviews
@@ -131,28 +140,30 @@
     _titleLabel.text = [NSString stringWithFormat:@"%@",@(_date.fs_day)];
     
 #define m_calculateTitleHeight \
-        CGFloat titleHeight = [_titleLabel.text sizeWithAttributes:@{NSFontAttributeName:self.titleLabel.font}].height;
+CGFloat titleHeight = [_titleLabel.text sizeWithAttributes:@{NSFontAttributeName:self.titleLabel.font}].height;
 #define m_adjustLabelFrame \
-    if (_subtitle) { \
-        _subtitleLabel.hidden = NO; \
-        _subtitleLabel.text = _subtitle; \
-        _subtitleLabel.font = [UIFont systemFontOfSize:_appearance.subtitleTextSize]; \
-        CGFloat subtitleHeight = [_subtitleLabel.text sizeWithAttributes:@{NSFontAttributeName:self.subtitleLabel.font}].height;\
-        CGFloat height = titleHeight + subtitleHeight; \
-        _titleLabel.frame = CGRectMake(0, \
-                                       (self.contentView.fs_height*5.0/6.0-height)*0.5, \
-                                       self.fs_width, \
-                                       titleHeight); \
-    \
-        _subtitleLabel.frame = CGRectMake(0, \
-                                          _titleLabel.fs_bottom - (_titleLabel.fs_height-_titleLabel.font.pointSize),\
-                                          self.fs_width,\
-                                          subtitleHeight);\
-        _subtitleLabel.textColor = self.colorForSubtitleLabel; \
-    } else { \
-        _titleLabel.frame = CGRectMake(0, 0, self.fs_width, floor(self.contentView.fs_height*5.0/6.0)); \
-        _subtitleLabel.hidden = YES; \
-    }
+if (_subtitle) { \
+_subtitleLabel.hidden = NO; \
+_subtitleLabel.text = _subtitle; \
+_subtitleLabel.font = [UIFont systemFontOfSize:_appearance.subtitleTextSize]; \
+CGFloat subtitleHeight = [_subtitleLabel.text sizeWithAttributes:@{NSFontAttributeName:self.subtitleLabel.font}].height;\
+CGFloat height = titleHeight + subtitleHeight; \
+_titleLabel.frame = CGRectMake(0, \
+(self.contentView.fs_height*5.0/6.0-height)*0.5, \
+self.fs_width, \
+titleHeight); \
+\
+_imageView.frame = _titleLabel.frame;\
+_subtitleLabel.frame = CGRectMake(0, \
+_titleLabel.fs_bottom - (_titleLabel.fs_height-_titleLabel.font.pointSize),\
+self.fs_width,\
+subtitleHeight);\
+_subtitleLabel.textColor = self.colorForSubtitleLabel; \
+} else { \
+_titleLabel.frame = CGRectMake(0, 0, self.fs_width, floor(self.contentView.fs_height*5.0/6.0)); \
+_imageView.frame = _titleLabel.frame;\
+_subtitleLabel.hidden = YES; \
+}
     
     if (self.calendar.ibEditing) {
         m_calculateTitleHeight

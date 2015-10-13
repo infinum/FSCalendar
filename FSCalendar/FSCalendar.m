@@ -24,6 +24,8 @@
 - (BOOL)hasEventForDate:(NSDate *)date;
 - (NSString *)subtitleForDate:(NSDate *)date;
 - (UIImage *)imageForDate:(NSDate *)date;
+- (UIImage *)intimateImageForDate:(NSDate *)date;
+- (UIImage *)noteImageForDate:(NSDate *)date;
 - (NSDate *)minimumDateForCalendar;
 - (NSDate *)maximumDateForCalendar;
 
@@ -416,6 +418,8 @@
     cell.appearance = _appearance;
     cell.date = [self dateForIndexPath:indexPath];
     cell.image = [self imageForDate:cell.date];
+    cell.intimateImage = [self intimateImageForDate:cell.date];
+    cell.noteImage = [self noteImageForDate:cell.date];
     cell.subtitle  = [self subtitleForDate:cell.date];
     cell.hasEvent = [self hasEventForDate:cell.date];
     cell.dateIsSelected = [self.selectedDates containsObject:cell.date];
@@ -1547,6 +1551,22 @@
 {
     if (_dataSource && [_dataSource respondsToSelector:@selector(calendar:imageForDate:)]) {
         return [_dataSource calendar:self imageForDate:date];
+    }
+    return nil;
+}
+
+- (UIImage *)intimateImageForDate:(NSDate *)date
+{
+    if (_dataSource && [_dataSource respondsToSelector:@selector(calendar:intimateImageForDate:)]) {
+        return [_dataSource calendar:self intimateImageForDate:date];
+    }
+    return nil;
+}
+
+- (UIImage *)noteImageForDate:(NSDate *)date
+{
+    if (_dataSource && [_dataSource respondsToSelector:@selector(calendar:noteImageForDate:)]) {
+        return [_dataSource calendar:self noteImageForDate:date];
     }
     return nil;
 }
