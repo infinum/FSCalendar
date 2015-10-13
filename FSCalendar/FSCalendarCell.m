@@ -194,6 +194,12 @@ _subtitleLabel.hidden = YES; \
     _imageView.image = _image;
     _imageView.hidden = !_image;
     
+    _intimateImageView.image = _intimateImage;
+    _intimateImageView.hidden = !_intimateImage;
+    
+    _noteImageView.image = _noteImage;
+    _noteImageView.hidden = !_noteImage;
+    
     _eventLayer.hidden = !_hasEvent;
     if (!_eventLayer.hidden) {
         _eventLayer.fillColor = self.preferedEventColor.CGColor ?: _appearance.eventColor.CGColor;
