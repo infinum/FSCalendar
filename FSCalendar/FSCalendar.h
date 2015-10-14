@@ -68,6 +68,7 @@ typedef NS_ENUM(NSInteger, FSCalendarCellState) {
 - (BOOL)calendar:(FSCalendar *)calendar hasEventForDate:(NSDate *)date;
 - (NSDate *)minimumDateForCalendar:(FSCalendar *)calendar;
 - (NSDate *)maximumDateForCalendar:(FSCalendar *)calendar;
+- (BOOL)calendar:(FSCalendar *)calendar hasPeriodForDate:(NSDate *)date;
 
 @end
 

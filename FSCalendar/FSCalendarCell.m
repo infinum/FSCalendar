@@ -50,6 +50,12 @@
         [self.contentView.layer insertSublayer:backgroundLayer below:_titleLabel.layer];
         self.backgroundLayer = backgroundLayer;
         
+        CAShapeLayer *periodLayer = [CAShapeLayer layer];
+        periodLayer.backgroundColor = [UIColor clearColor].CGColor;
+        periodLayer.hidden = YES;
+        [self.contentView.layer insertSublayer:periodLayer below:self.backgroundLayer];
+        self.periodLayer = periodLayer;
+        
         CAShapeLayer *eventLayer = [CAShapeLayer layer];
         eventLayer.backgroundColor = [UIColor clearColor].CGColor;
         eventLayer.fillColor = [UIColor cyanColor].CGColor;
@@ -189,6 +195,14 @@ _subtitleLabel.hidden = YES; \
         [UIBezierPath bezierPathWithOvalInRect:_backgroundLayer.bounds].CGPath :
         [UIBezierPath bezierPathWithRect:_backgroundLayer.bounds].CGPath;
         _backgroundLayer.fillColor = self.colorForBackgroundLayer.CGColor;
+    }
+    
+    _periodLayer.hidden = !self.isPeriodDay;
+    if (!_periodLayer.hidden) {
+        _periodLayer.path = _appearance.cellStyle == FSCalendarCellStyleCircle ?
+        [UIBezierPath bezierPathWithOvalInRect:_periodLayer.bounds].CGPath :
+        [UIBezierPath bezierPathWithRect:_periodLayer.bounds].CGPath;
+        _periodLayer.fillColor = [UIColor colorWithRed:253.0/255.0 green:160.0/255.0 blue:196.0/255.0 alpha:1.0].CGColor;
     }
     
     _imageView.image = _image;

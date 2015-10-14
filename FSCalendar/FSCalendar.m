@@ -424,6 +424,7 @@
     cell.hasEvent = [self hasEventForDate:cell.date];
     cell.dateIsSelected = [self.selectedDates containsObject:cell.date];
     cell.dateIsToday = [cell.date fs_isEqualToDateForDay:_today];
+    cell.isPeriodDay = [self hasPeriodForDate:cell.date];
     
     cell.preferedSelectionColor = [self preferedSelectionColorForDate:cell.date];
     cell.preferedTitleDefaultColor = [self preferedTitleDefaultColorForDate:cell.date];
@@ -1599,6 +1600,15 @@
         _maximumDate = [NSDate fs_dateWithYear:2099 month:12 day:31];
     }
     return _maximumDate;
+}
+
+- (BOOL)hasPeriodForDate:(NSDate *)date
+{
+    if (_dataSource && [_dataSource respondsToSelector:@selector(calendar:hasPeriodForDate:)]) {
+        return [_dataSource calendar:self hasPeriodForDate:date];
+    }
+    
+    return NO;
 }
 
 @end

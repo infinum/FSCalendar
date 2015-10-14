@@ -21,6 +21,7 @@
 @property (weak, nonatomic) UIImageView *noteImageView;
 
 @property (weak, nonatomic) CAShapeLayer *backgroundLayer;
+@property (weak, nonatomic) CAShapeLayer *periodLayer;
 @property (weak, nonatomic) CAShapeLayer *eventLayer;
 
 @property (strong, nonatomic) NSDate   *date;
@@ -28,6 +29,8 @@
 @property (strong, nonatomic) UIImage  *image;
 @property (strong, nonatomic) UIImage  *intimateImage;
 @property (strong, nonatomic) UIImage  *noteImage;
+
+@property (assign, nonatomic) BOOL isPeriodDay;
 
 @property (assign, nonatomic) BOOL hasEvent;
 
