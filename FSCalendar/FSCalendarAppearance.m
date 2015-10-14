@@ -66,6 +66,9 @@
         _cellStyle = FSCalendarCellStyleCircle;
         _eventColor = [kBlue colorWithAlphaComponent:0.75];
         
+        _calendarDateFont = [UIFont systemFontOfSize:0].fontName;
+        _calendarHeaderFont = [UIFont systemFontOfSize:0].fontName;
+        
     }
     return self;
 }
@@ -371,6 +374,22 @@
     }
 }
 
+- (void)setCalendarHeaderFont:(NSString *)calendarHeaderFont
+{
+    if ([_calendarHeaderFont isEqualToString:calendarHeaderFont] == NO) {
+        _calendarHeaderFont = calendarHeaderFont;
+        [_calendar.header.collectionView reloadData];
+    }
+}
+
+- (void)setCalendarDateFont:(NSString *)calendarDateFont
+{
+    if ([_calendarDateFont isEqualToString:calendarDateFont] == NO) {
+        _calendarDateFont = calendarDateFont;
+        [self adjustTitleIfNecessary];
+    }
+}
+
 - (void)adjustTitleIfNecessary
 {
     if (self.calendar.pagingEnabled) {
@@ -389,7 +408,7 @@
     // reload appearance
     [_calendar.collectionView.visibleCells makeObjectsPerformSelector:@selector(setNeedsLayout)];
     [_calendar.header.collectionView reloadData];
-    [_calendar.weekdays setValue:[UIFont systemFontOfSize:_weekdayTextSize] forKeyPath:@"font"];
+    [_calendar.weekdays setValue:[UIFont fontWithName:_calendarDateFont size:_weekdayTextSize] forKeyPath:@"font"];
 }
 
 @end

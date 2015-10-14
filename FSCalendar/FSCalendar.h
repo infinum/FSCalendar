@@ -109,6 +109,9 @@ IB_DESIGNABLE
 @property (readonly, nonatomic) NSDate *selectedDate;
 @property (readonly, nonatomic) NSArray *selectedDates;
 
+@property (strong, nonatomic) NSFont *dayAndYearFont;
+@property (strong, nonatomic) NSFont *calendarFont;
+
 - (void)reloadData;
 - (CGSize)sizeThatFits:(CGSize)size;
 

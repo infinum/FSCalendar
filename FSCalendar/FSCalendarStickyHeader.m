@@ -80,7 +80,7 @@
     CGFloat weekdayHeight = [@"1" sizeWithAttributes:@{NSFontAttributeName:[_weekdayLabels.lastObject font]}].height; \
     CGFloat weekdayMargin = (weekdayHeight*0.4+_contentView.fs_height*0.2)*0.5; \
     CGFloat titleWidth = _contentView.fs_width; \
-    CGFloat titleHeight = [@"1" sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:self.appearance.headerTitleTextSize]}].height; \
+    CGFloat titleHeight = [@"1" sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:self.appearance.calendarDateFont size:self.appearance.headerTitleTextSize]}].height; \
     CGFloat titleMargin = (titleHeight*0.2+_contentView.fs_height*0.1)*0.5; \
 
 #define m_adjust \
@@ -133,7 +133,7 @@
 
 - (void)reloadAppearance
 {
-    _titleLabel.font = [UIFont systemFontOfSize:self.appearance.headerTitleTextSize];
+    _titleLabel.font = [UIFont fontWithName:self.appearance.calendarDateFont size:self.appearance.headerTitleTextSize];
     _titleLabel.textColor = self.appearance.headerTitleColor;
     [_weekdayLabels enumerateObjectsUsingBlock:^(UILabel *label, NSUInteger index, BOOL *stop) {
         label.font = [UIFont systemFontOfSize:self.appearance.weekdayTextSize];

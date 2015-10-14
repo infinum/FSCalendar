@@ -48,6 +48,9 @@ typedef NS_OPTIONS(NSInteger, FSCalendarCellStyle) {
 @property (strong, nonatomic) UIColor  *todayColor;
 @property (strong, nonatomic) UIColor  *todaySelectionColor;
 
+@property (strong, nonatomic) NSString *calendarHeaderFont;
+@property (strong, nonatomic) NSString *calendarDateFont;
+
 @property (assign, nonatomic) FSCalendarCellStyle cellStyle;
 @property (assign, nonatomic) BOOL autoAdjustTitleSize;
 @property (assign, nonatomic) BOOL useVeryShortWeekdaySymbols;
