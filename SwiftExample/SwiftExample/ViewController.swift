@@ -38,5 +38,9 @@ class ViewController: UIViewController, FSCalendarDataSource, FSCalendarDelegate
         calendarHeightConstraint.constant = calendar.sizeThatFits(CGSizeZero).height
     }
     
+    func calendar(calendar: FSCalendar!, hasPeriodForDate date: NSDate!) -> Bool {
+        return date.fs_day == 10 || date.fs_day == 11 || date.fs_day == 12
+    }
+    
 }
 

@@ -95,6 +95,8 @@
                                         diameter,
                                         diameter);
     
+    _periodLayer.frame = _backgroundLayer.frame;
+    
     CGFloat eventSize = _backgroundLayer.frame.size.height/6.0;
     _eventLayer.frame = CGRectMake((_backgroundLayer.frame.size.width-eventSize)/2+_backgroundLayer.frame.origin.x, CGRectGetMaxY(_backgroundLayer.frame)+eventSize*0.2, eventSize*0.8, eventSize*0.8);
     _eventLayer.path = [UIBezierPath bezierPathWithOvalInRect:_eventLayer.bounds].CGPath;
