@@ -31,6 +31,7 @@
 @property (strong, nonatomic) UIImage  *noteImage;
 
 @property (assign, nonatomic) BOOL isPeriodDay;
+@property (assign, nonatomic) BOOL isApproximatedPeriodDay;
 
 @property (assign, nonatomic) BOOL hasEvent;
 

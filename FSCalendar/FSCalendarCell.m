@@ -89,9 +89,8 @@
 {
     [super setBounds:bounds];
     CGFloat titleHeight = self.bounds.size.height*5.0/6.0;
-    CGFloat diameter = MIN(self.bounds.size.height*5.0/6.0,self.bounds.size.width);
-    _backgroundLayer.frame = CGRectMake((self.bounds.size.width-diameter)/2,
-                                        (titleHeight-diameter)/2,
+    CGFloat diameter = MIN(self.bounds.size.height*5.0/9.0,self.bounds.size.width);
+    _backgroundLayer.frame = CGRectMake(0, 0,
                                         diameter,
                                         diameter);
     
@@ -142,49 +141,55 @@
 
 #pragma mark - Private
 
+- (void)adjustLabelFrame:(CGFloat)titleHeight
+{
+    if (_subtitle) {
+        _subtitleLabel.hidden = NO;
+        _subtitleLabel.text = _subtitle;
+        _subtitleLabel.font = [UIFont systemFontOfSize:_appearance.subtitleTextSize];
+        CGFloat subtitleHeight = [_subtitleLabel.text sizeWithAttributes:@{NSFontAttributeName:self.subtitleLabel.font}].height;
+        CGFloat height = titleHeight + subtitleHeight;
+        _titleLabel.frame = CGRectMake(0,
+                                       (self.contentView.fs_height*5.0/6.0-height)*0.5,
+                                       self.fs_width,
+                                       titleHeight);
+        
+        
+        _subtitleLabel.frame = CGRectMake(0,
+                                          _titleLabel.fs_bottom - (_titleLabel.fs_height-_titleLabel.font.pointSize),
+                                          self.fs_width,
+                                          subtitleHeight);
+        _subtitleLabel.textColor = self.colorForSubtitleLabel;
+    } else {
+        CGFloat width = MIN(self.fs_width / 2, self.fs_height / 2);
+        _titleLabel.frame = CGRectMake(1, 0, width, width);
+        _subtitleLabel.hidden = YES;
+    }
+    _imageView.frame = _titleLabel.frame;
+    _noteImageView.frame = CGRectMake(_imageView.frame.size.width / 2 - 15 - 8, _imageView.frame.size.height / 2 - 15 - 8, 16, 16);
+    _intimateImageView.frame = CGRectMake(_imageView.frame.size.width / 2 + 15 - 8, _imageView.frame.size.height / 2 - 15 - 8, 16, 16);
+    
+    CGFloat imageSize = 16;
+    CGFloat deltaHeight = (self.fs_height / 2 - imageSize) / 2;
+    CGFloat deltaWidth = (self.fs_width / 2 - imageSize) / 2;
+    _imageView.frame = CGRectMake(self.fs_width / 2 + deltaWidth, self.fs_height / 2 + deltaHeight, imageSize, imageSize);
+    _noteImageView.frame = CGRectMake(self.fs_width / 2 + deltaWidth, deltaHeight, imageSize, imageSize);
+    _intimateImageView.frame = CGRectMake(deltaWidth, self.fs_height / 2 + deltaHeight, imageSize, imageSize);
+}
+
 - (void)configureCell
 {
     _titleLabel.font = [UIFont systemFontOfSize:_appearance.titleTextSize];
     _titleLabel.text = [NSString stringWithFormat:@"%@",@(_date.fs_day)];
     
-#define m_calculateTitleHeight \
-CGFloat titleHeight = [_titleLabel.text sizeWithAttributes:@{NSFontAttributeName:self.titleLabel.font}].height;
-#define m_adjustLabelFrame \
-if (_subtitle) { \
-_subtitleLabel.hidden = NO; \
-_subtitleLabel.text = _subtitle; \
-_subtitleLabel.font = [UIFont systemFontOfSize:_appearance.subtitleTextSize]; \
-CGFloat subtitleHeight = [_subtitleLabel.text sizeWithAttributes:@{NSFontAttributeName:self.subtitleLabel.font}].height;\
-CGFloat height = titleHeight + subtitleHeight; \
-_titleLabel.frame = CGRectMake(0, \
-(self.contentView.fs_height*5.0/6.0-height)*0.5, \
-self.fs_width, \
-titleHeight); \
-\
-_imageView.frame = _titleLabel.frame;\
-_noteImageView.frame = CGRectMake(_imageView.frame.size.width / 2 - 15 - 8, _imageView.frame.size.height / 2 - 15 - 8, 16, 16);\
-_intimateImageView.frame = CGRectMake(_imageView.frame.size.width / 2 + 15 - 8, _imageView.frame.size.height / 2 - 15 - 8, 16, 16);\
-_subtitleLabel.frame = CGRectMake(0, \
-_titleLabel.fs_bottom - (_titleLabel.fs_height-_titleLabel.font.pointSize),\
-self.fs_width,\
-subtitleHeight);\
-_subtitleLabel.textColor = self.colorForSubtitleLabel; \
-} else { \
-_titleLabel.frame = CGRectMake(0, 0, self.fs_width, floor(self.contentView.fs_height*5.0/6.0)); \
-_imageView.frame = _titleLabel.frame;\
-_noteImageView.frame = CGRectMake(_imageView.frame.size.width / 2 - 15 - 8, _imageView.frame.size.height / 2 - 15 - 8, 16, 16);\
-_intimateImageView.frame = CGRectMake(_imageView.frame.size.width / 2 + 15 - 8, _imageView.frame.size.height / 2 - 15 - 8, 16, 16);\
-_subtitleLabel.hidden = YES; \
-}
-    
     if (self.calendar.ibEditing) {
-        m_calculateTitleHeight
-        m_adjustLabelFrame
+        CGFloat titleHeight = [_titleLabel.text sizeWithAttributes:@{NSFontAttributeName:self.titleLabel.font}].height;
+        [self adjustLabelFrame:titleHeight];
     } else {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            m_calculateTitleHeight
+            CGFloat titleHeight = [_titleLabel.text sizeWithAttributes:@{NSFontAttributeName:self.titleLabel.font}].height;
             dispatch_async(dispatch_get_main_queue(), ^{
-                m_adjustLabelFrame
+                [self adjustLabelFrame:titleHeight];
             });
         });
     }
@@ -199,19 +204,24 @@ _subtitleLabel.hidden = YES; \
         _backgroundLayer.fillColor = self.colorForBackgroundLayer.CGColor;
     }
     
-    _periodLayer.hidden = !self.isPeriodDay;
+    _periodLayer.hidden = (!self.isPeriodDay || !self.isApproximatedPeriodDay);
     if (!_periodLayer.hidden) {
         _periodLayer.path = _appearance.cellStyle == FSCalendarCellStyleCircle ?
         [UIBezierPath bezierPathWithOvalInRect:_periodLayer.bounds].CGPath :
         [UIBezierPath bezierPathWithRect:_periodLayer.bounds].CGPath;
         _periodLayer.fillColor = [UIColor colorWithRed:253.0/255.0 green:160.0/255.0 blue:196.0/255.0 alpha:1.0].CGColor;
+        if (self.isApproximatedPeriodDay) {
+            _periodLayer.opacity = 0.4;
+        } else {
+            _periodLayer.opacity = 1.0;
+        }
     }
     
     _imageView.image = _image;
     _imageView.hidden = !_image;
     
     _intimateImageView.image = _intimateImage;
-    _intimateImageView.hidden = !_intimateImage;
+    _intimateImageView.hidden = NO;
     
     _noteImageView.image = _noteImage;
     _noteImageView.hidden = !_noteImage;

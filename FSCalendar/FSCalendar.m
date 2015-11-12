@@ -418,13 +418,15 @@
     cell.appearance = _appearance;
     cell.date = [self dateForIndexPath:indexPath];
     cell.image = [self imageForDate:cell.date];
-    cell.intimateImage = [self intimateImageForDate:cell.date];
-    cell.noteImage = [self noteImageForDate:cell.date];
     cell.subtitle  = [self subtitleForDate:cell.date];
     cell.hasEvent = [self hasEventForDate:cell.date];
     cell.dateIsSelected = [self.selectedDates containsObject:cell.date];
     cell.dateIsToday = [cell.date fs_isEqualToDateForDay:_today];
+    
     cell.isPeriodDay = [self hasPeriodForDate:cell.date];
+    cell.isApproximatedPeriodDay = [self approximatedPeriodForDate:cell.date];
+    cell.intimateImage = [self intimateImageForDate:cell.date];
+    cell.noteImage = [self noteImageForDate:cell.date];
     
     cell.preferedSelectionColor = [self preferedSelectionColorForDate:cell.date];
     cell.preferedTitleDefaultColor = [self preferedTitleDefaultColorForDate:cell.date];
@@ -1606,6 +1608,15 @@
 {
     if (_dataSource && [_dataSource respondsToSelector:@selector(calendar:hasPeriodForDate:)]) {
         return [_dataSource calendar:self hasPeriodForDate:date];
+    }
+    
+    return NO;
+}
+
+- (BOOL)approximatedPeriodForDate:(NSDate *)date
+{
+    if (_dataSource && [_dataSource respondsToSelector:@selector(calendar:approximatedPeriodForDate:)]) {
+        return [_dataSource calendar:self approximatedPeriodForDate:date];
     }
     
     return NO;

@@ -33,7 +33,7 @@
         
         _autoAdjustTitleSize = YES;
         
-        _titleTextSize    = 13.5;
+        _titleTextSize    = 15;
         _subtitleTextSize = 10;
         _weekdayTextSize  = 14;
         _headerTitleTextSize = 16;
