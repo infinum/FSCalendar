@@ -17,15 +17,18 @@
 @property (weak, nonatomic) UILabel  *titleLabel;
 @property (weak, nonatomic) UILabel  *subtitleLabel;
 @property (weak, nonatomic) UIImageView *imageView;
+@property (weak, nonatomic) UIImageView *backgroundImageView;
 @property (weak, nonatomic) UIImageView *intimateImageView;
 @property (weak, nonatomic) UIImageView *noteImageView;
 
 @property (weak, nonatomic) CAShapeLayer *backgroundLayer;
-@property (weak, nonatomic) CAShapeLayer *periodLayer;
 @property (weak, nonatomic) CAShapeLayer *eventLayer;
 
 @property (strong, nonatomic) NSDate   *date;
 @property (strong, nonatomic) NSString *subtitle;
+@property (strong, nonatomic) UIImage  *periodBackgroundImage;
+@property (strong, nonatomic) UIImage  *monthDayBackgroundImage;
+@property (strong, nonatomic) UIImage  *placeholderBackgroundImage;
 @property (strong, nonatomic) UIImage  *image;
 @property (strong, nonatomic) UIImage  *intimateImage;
 @property (strong, nonatomic) UIImage  *noteImage;

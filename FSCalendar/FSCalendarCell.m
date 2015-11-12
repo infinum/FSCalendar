@@ -29,6 +29,10 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        UIImageView *backgroundImageView = [[UIImageView alloc] initWithFrame:self.contentView.frame];
+        [self.contentView addSubview:backgroundImageView];
+        self.backgroundImageView = backgroundImageView;
+        
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -50,12 +54,6 @@
         [self.contentView.layer insertSublayer:backgroundLayer below:_titleLabel.layer];
         self.backgroundLayer = backgroundLayer;
         
-        CAShapeLayer *periodLayer = [CAShapeLayer layer];
-        periodLayer.backgroundColor = [UIColor clearColor].CGColor;
-        periodLayer.hidden = YES;
-        [self.contentView.layer insertSublayer:periodLayer below:self.backgroundLayer];
-        self.periodLayer = periodLayer;
-        
         CAShapeLayer *eventLayer = [CAShapeLayer layer];
         eventLayer.backgroundColor = [UIColor clearColor].CGColor;
         eventLayer.fillColor = [UIColor cyanColor].CGColor;
@@ -65,17 +63,17 @@
         self.eventLayer = eventLayer;
         
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectZero];
-        imageView.contentMode = UIViewContentModeCenter;
+        imageView.contentMode = UIViewContentModeScaleAspectFill;
         [self.contentView addSubview:imageView];
         self.imageView = imageView;
         
         UIImageView *intimateImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
-        intimateImageView.contentMode = UIViewContentModeCenter;
+        intimateImageView.contentMode = UIViewContentModeScaleAspectFill;
         [self.contentView addSubview:intimateImageView];
         self.intimateImageView = intimateImageView;
         
         UIImageView *noteImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
-        noteImageView.contentMode = UIViewContentModeCenter;
+        noteImageView.contentMode = UIViewContentModeScaleAspectFill;
         [self.contentView addSubview:noteImageView];
         self.noteImageView = noteImageView;
         
@@ -88,13 +86,14 @@
 - (void)setBounds:(CGRect)bounds
 {
     [super setBounds:bounds];
-    CGFloat titleHeight = self.bounds.size.height*5.0/6.0;
     CGFloat diameter = MIN(self.bounds.size.height*5.0/9.0,self.bounds.size.width);
     _backgroundLayer.frame = CGRectMake(0, 0,
                                         diameter,
                                         diameter);
     
-    _periodLayer.frame = _backgroundLayer.frame;
+    CGFloat inset = 1.0;
+    CGRect backgroundFrame = CGRectMake(inset, inset, self.frame.size.width - 2 * inset, self.frame.size.height - 2 * inset);
+    self.backgroundImageView.frame = backgroundFrame;
     
     CGFloat eventSize = _backgroundLayer.frame.size.height/6.0;
     _eventLayer.frame = CGRectMake((_backgroundLayer.frame.size.width-eventSize)/2+_backgroundLayer.frame.origin.x, CGRectGetMaxY(_backgroundLayer.frame)+eventSize*0.2, eventSize*0.8, eventSize*0.8);
@@ -165,9 +164,6 @@
         _titleLabel.frame = CGRectMake(1, 0, width, width);
         _subtitleLabel.hidden = YES;
     }
-    _imageView.frame = _titleLabel.frame;
-    _noteImageView.frame = CGRectMake(_imageView.frame.size.width / 2 - 15 - 8, _imageView.frame.size.height / 2 - 15 - 8, 16, 16);
-    _intimateImageView.frame = CGRectMake(_imageView.frame.size.width / 2 + 15 - 8, _imageView.frame.size.height / 2 - 15 - 8, 16, 16);
     
     CGFloat imageSize = 16;
     CGFloat deltaHeight = (self.fs_height / 2 - imageSize) / 2;
@@ -204,17 +200,17 @@
         _backgroundLayer.fillColor = self.colorForBackgroundLayer.CGColor;
     }
     
-    _periodLayer.hidden = (!self.isPeriodDay || !self.isApproximatedPeriodDay);
-    if (!_periodLayer.hidden) {
-        _periodLayer.path = _appearance.cellStyle == FSCalendarCellStyleCircle ?
-        [UIBezierPath bezierPathWithOvalInRect:_periodLayer.bounds].CGPath :
-        [UIBezierPath bezierPathWithRect:_periodLayer.bounds].CGPath;
-        _periodLayer.fillColor = [UIColor colorWithRed:253.0/255.0 green:160.0/255.0 blue:196.0/255.0 alpha:1.0].CGColor;
+    if (self.isPeriodDay || self.isApproximatedPeriodDay) {
+        _backgroundImageView.image = _periodBackgroundImage;
         if (self.isApproximatedPeriodDay) {
-            _periodLayer.opacity = 0.4;
+            _backgroundImageView.alpha = 0.4;
         } else {
-            _periodLayer.opacity = 1.0;
+            _backgroundImageView.alpha = 1.0;
         }
+    } else if (self.dateIsPlaceholder) {
+        _backgroundImageView.image = _placeholderBackgroundImage;
+    } else {
+        _backgroundImageView.image = _monthDayBackgroundImage;
     }
     
     _imageView.image = _image;

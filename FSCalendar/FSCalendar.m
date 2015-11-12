@@ -53,6 +53,10 @@
 }
 @property (strong, nonatomic) NSMutableArray             *weekdays;
 
+@property (strong, nonatomic) UIImage  *periodBackgroundImage;
+@property (strong, nonatomic) UIImage  *monthDayBackgroundImage;
+@property (strong, nonatomic) UIImage  *placeholderBackgroundImage;
+
 @property (weak  , nonatomic) UIView                     *contentView;
 @property (weak  , nonatomic) UIView                     *daysContainer;
 @property (weak  , nonatomic) CAShapeLayer               *maskLayer;
@@ -427,6 +431,10 @@
     cell.isApproximatedPeriodDay = [self approximatedPeriodForDate:cell.date];
     cell.intimateImage = [self intimateImageForDate:cell.date];
     cell.noteImage = [self noteImageForDate:cell.date];
+    
+    cell.placeholderBackgroundImage = [self placeholderBackgroundImage];
+    cell.periodBackgroundImage = [self periodBackgroundImage];
+    cell.monthDayBackgroundImage = [self monthDayBackgroundImage];
     
     cell.preferedSelectionColor = [self preferedSelectionColorForDate:cell.date];
     cell.preferedTitleDefaultColor = [self preferedTitleDefaultColorForDate:cell.date];
