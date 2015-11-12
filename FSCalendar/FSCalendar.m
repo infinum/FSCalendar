@@ -53,10 +53,6 @@
 }
 @property (strong, nonatomic) NSMutableArray             *weekdays;
 
-@property (strong, nonatomic) UIImage  *periodBackgroundImage;
-@property (strong, nonatomic) UIImage  *monthDayBackgroundImage;
-@property (strong, nonatomic) UIImage  *placeholderBackgroundImage;
-
 @property (weak  , nonatomic) UIView                     *contentView;
 @property (weak  , nonatomic) UIView                     *daysContainer;
 @property (weak  , nonatomic) CAShapeLayer               *maskLayer;

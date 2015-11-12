@@ -91,6 +91,10 @@ IB_DESIGNABLE
 @property (weak, nonatomic) IBOutlet id<FSCalendarDelegate> delegate;
 @property (weak, nonatomic) IBOutlet id<FSCalendarDataSource> dataSource;
 
+@property (strong, nonatomic) UIImage  *periodBackgroundImage;
+@property (strong, nonatomic) UIImage  *monthDayBackgroundImage;
+@property (strong, nonatomic) UIImage  *placeholderBackgroundImage;
+
 @property (strong, nonatomic) NSDate *today;
 @property (strong, nonatomic) NSDate *currentPage;
 @property (strong, nonatomic) NSLocale *locale;
