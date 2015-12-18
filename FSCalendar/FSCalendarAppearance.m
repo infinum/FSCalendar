@@ -17,7 +17,6 @@
 @interface FSCalendarAppearance ()
 
 @property (strong, nonatomic) NSMutableDictionary *backgroundColors;
-@property (strong, nonatomic) NSMutableDictionary *titleColors;
 @property (strong, nonatomic) NSMutableDictionary *subtitleColors;
 
 - (void)adjustTitleIfNecessary;
@@ -35,7 +34,7 @@
         
         _titleTextSize    = 15;
         _subtitleTextSize = 10;
-        _weekdayTextSize  = 14;
+        _weekdayTextSize  = 10;
         _headerTitleTextSize = 16;
         _headerTitleColor = kBlueText;
         _headerDateFormat = @"MMMM yyyy";
@@ -398,7 +397,6 @@
             _titleTextSize       = _calendar.collectionView.fs_height/3/factor;
             _subtitleTextSize    = _calendar.collectionView.fs_height/4.5/factor;
             _headerTitleTextSize = _titleTextSize + 3;
-            _weekdayTextSize     = _titleTextSize;
             
         }
     } else {

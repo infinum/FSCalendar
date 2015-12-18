@@ -61,10 +61,12 @@
 @property (weak  , nonatomic) UICollectionView           *collectionView;
 @property (weak  , nonatomic) UICollectionViewFlowLayout *collectionViewLayout;
 
+@property (strong, nonatomic) NSCalendar *calendar;
+@property (strong, nonatomic) NSTimeZone *timeZone;
+
 @property (weak  , nonatomic) FSCalendarHeader           *header;
 @property (weak  , nonatomic) FSCalendarHeaderTouchDeliver *deliver;
 
-@property (strong, nonatomic) NSCalendar                 *calendar;
 @property (assign, nonatomic) CGFloat                    rowHeight;
 
 @property (assign, nonatomic) BOOL                       ibEditing;
@@ -103,8 +105,8 @@
 
 @implementation FSCalendar
 
-@dynamic locale, selectedDate;
-@synthesize scrollDirection = _scrollDirection, firstWeekday = _firstWeekday, headerHeight =_headerHeight;
+@dynamic  selectedDate;
+@synthesize scrollDirection = _scrollDirection, firstWeekday = _firstWeekday, headerHeight =_headerHeight, locale=_locale;
 
 #pragma mark - Life Cycle && Initialize
 
@@ -134,10 +136,15 @@
     _minimumDate = [NSDate fs_dateWithYear:1970 month:1 day:1];
     _maximumDate = [NSDate fs_dateWithYear:2099 month:12 day:31];
     
+    _timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
+    _locale = [NSLocale currentLocale];
     _headerHeight     = -1;
     _calendar         = [NSCalendar fs_sharedCalendar];
     _firstWeekday     = _calendar.firstWeekday;
     
+    _calendar.locale = _locale;
+    _calendar.timeZone = _timeZone;
+
     _scrollDirection = FSCalendarScrollDirectionHorizontal;
     _firstWeekday = [_calendar firstWeekday];
     _scope = FSCalendarScopeMonth;
@@ -151,6 +158,8 @@
     _pagingEnabled = YES;
     _needsAdjustingViewFrame = YES;
     _needsAdjustingTextSize = YES;
+    
+    _excludeDaysArray = [[NSMutableArray alloc] init];
     
     UIView *contentView = [[UIView alloc] initWithFrame:CGRectZero];
     contentView.backgroundColor = [UIColor clearColor];
@@ -233,7 +242,7 @@
         [_weekdays enumerateObjectsUsingBlock:^(UILabel *weekdayLabel, NSUInteger idx, BOOL *stop) {
             NSUInteger absoluteIndex = ((idx-(_firstWeekday-1))+7)%7;
             weekdayLabel.frame = CGRectMake(absoluteIndex*width,
-                                            _header.fs_height,
+                                            _header.fs_height * 1.1,
                                             width,
                                             height);
         }];
@@ -777,7 +786,7 @@
 - (void)setCurrentPage:(NSDate *)currentPage animated:(BOOL)animated
 {
     if (![self isDateInRange:currentPage]) {
-        [NSException raise:@"currentMonth out of range" format:@""];
+        // do nothing
     }
     if ([self isDateInDifferentPage:currentPage]) {
         currentPage = currentPage.fs_dateByIgnoringTimeComponents;
@@ -1324,7 +1333,14 @@
 
 - (BOOL)isDateInRange:(NSDate *)date
 {
-    return [date fs_daysFrom:_minimumDate] >= 0 && [date fs_daysFrom:_maximumDate] <= 0;
+    BOOL dateIsInRange = [date fs_daysFrom:_minimumDate] >= 0 && [date fs_daysFrom:_maximumDate] <= 0;
+    BOOL dateIsNotInOccupiedIntervals = YES;
+    for (NSDate *occupiedDate in self.excludeDaysArray) {
+        if (occupiedDate.fs_day == date.fs_day && occupiedDate.fs_month == date.fs_month && occupiedDate.fs_year == date.fs_year) {
+            dateIsNotInOccupiedIntervals = NO;
+        }
+    }
+    return dateIsInRange && dateIsNotInOccupiedIntervals;
 }
 
 - (BOOL)isDateSelected:(NSDate *)date
@@ -1393,7 +1409,7 @@
             UIFont *weekdayFont = [UIFont fontWithName:_appearance.calendarHeaderFont size:_appearance.weekdayTextSize];
             for (int i = 0; i < weekSymbols.count; i++) {
                 UILabel *weekdayLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-                weekdayLabel.text = weekSymbols[i];
+                weekdayLabel.text = [weekSymbols[i] uppercaseString];
                 weekdayLabel.textAlignment = NSTextAlignmentCenter;
                 weekdayLabel.font = weekdayFont;
                 weekdayLabel.textColor = _appearance.weekdayTextColor;

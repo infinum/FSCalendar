@@ -87,11 +87,11 @@
 {
     [super setBounds:bounds];
     CGFloat diameter = MIN(self.bounds.size.height*5.0/9.0,self.bounds.size.width);
-    _backgroundLayer.frame = CGRectMake(0, 0,
-                                        diameter,
-                                        diameter);
+    _backgroundLayer.frame = CGRectMake(3, 2,
+                                        diameter - 2,
+                                        diameter - 2);
     
-    CGFloat inset = 1.0;
+    CGFloat inset = 0.0;
     CGRect backgroundFrame = CGRectMake(inset, inset, self.frame.size.width - 2 * inset, self.frame.size.height - 2 * inset);
     self.backgroundImageView.frame = backgroundFrame;
     
@@ -147,11 +147,8 @@
         _subtitleLabel.text = _subtitle;
         _subtitleLabel.font = [UIFont systemFontOfSize:_appearance.subtitleTextSize];
         CGFloat subtitleHeight = [_subtitleLabel.text sizeWithAttributes:@{NSFontAttributeName:self.subtitleLabel.font}].height;
-        CGFloat height = titleHeight + subtitleHeight;
-        _titleLabel.frame = CGRectMake(0,
-                                       (self.contentView.fs_height*5.0/6.0-height)*0.5,
-                                       self.fs_width,
-                                       titleHeight);
+        CGFloat width = MIN(self.fs_width / 2, self.fs_height / 2);
+        _titleLabel.frame = CGRectMake(3, 2, width, width);
         
         
         _subtitleLabel.frame = CGRectMake(0,
@@ -161,16 +158,16 @@
         _subtitleLabel.textColor = self.colorForSubtitleLabel;
     } else {
         CGFloat width = MIN(self.fs_width / 2, self.fs_height / 2);
-        _titleLabel.frame = CGRectMake(1, 0, width, width);
+        _titleLabel.frame = CGRectMake(3, 2, width, width);
         _subtitleLabel.hidden = YES;
     }
     
-    CGFloat imageSize = 16;
+    CGFloat imageSize = 15;
     CGFloat deltaHeight = (self.fs_height / 2 - imageSize) / 2;
     CGFloat deltaWidth = (self.fs_width / 2 - imageSize) / 2;
     _imageView.frame = CGRectMake(self.fs_width / 2 + deltaWidth, self.fs_height / 2 + deltaHeight, imageSize, imageSize);
     _noteImageView.frame = CGRectMake(self.fs_width / 2 + deltaWidth, deltaHeight, imageSize, imageSize);
-    _intimateImageView.frame = CGRectMake(deltaWidth, self.fs_height / 2 + deltaHeight, imageSize, imageSize);
+    _intimateImageView.frame = CGRectMake(deltaWidth + 2, self.fs_height / 2 + deltaHeight, imageSize, imageSize);
 }
 
 - (void)configureCell
@@ -200,12 +197,11 @@
         _backgroundLayer.fillColor = self.colorForBackgroundLayer.CGColor;
     }
     
+    _backgroundImageView.alpha = 1.0;
     if (self.isPeriodDay || self.isApproximatedPeriodDay) {
         _backgroundImageView.image = _periodBackgroundImage;
         if (self.isApproximatedPeriodDay) {
-            _backgroundImageView.alpha = 0.4;
-        } else {
-            _backgroundImageView.alpha = 1.0;
+            _backgroundImageView.alpha = 0.6;
         }
     } else if (self.dateIsPlaceholder) {
         _backgroundImageView.image = _placeholderBackgroundImage;

@@ -20,6 +20,8 @@ typedef NS_OPTIONS(NSInteger, FSCalendarCellStyle) {
 
 @property (weak  , nonatomic) FSCalendar *calendar;
 
+@property (strong, nonatomic) NSMutableDictionary *titleColors;
+
 @property (assign, nonatomic) CGFloat  titleTextSize;
 @property (assign, nonatomic) CGFloat  subtitleTextSize;
 @property (assign, nonatomic) CGFloat  weekdayTextSize;

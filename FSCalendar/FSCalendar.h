@@ -88,6 +88,8 @@ typedef NS_ENUM(NSInteger, FSCalendarCellState) {
 IB_DESIGNABLE
 @interface FSCalendar : UIView
 
+@property (strong, nonatomic) NSMutableArray<NSDate *> *excludeDaysArray;
+
 @property (weak, nonatomic) IBOutlet id<FSCalendarDelegate> delegate;
 @property (weak, nonatomic) IBOutlet id<FSCalendarDataSource> dataSource;
 
