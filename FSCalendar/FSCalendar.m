@@ -1228,6 +1228,10 @@
 
 - (void)scrollToPageForDate:(NSDate *)date animated:(BOOL)animated
 {
+    if (date.timeIntervalSince1970 < _minimumDate.timeIntervalSince1970 ||
+        date.timeIntervalSince1970 > _maximumDate.timeIntervalSince1970 ) {
+        return;
+    }
     if (!_collectionView.tracking && !_collectionView.decelerating) {
         if (_pagingEnabled && [self isDateInDifferentPage:date]) {
             [self willChangeValueForKey:@"currentPage"];
