@@ -1103,7 +1103,9 @@
         return;
     }
     if (![self isDateInRange:date]) {
-        [NSException raise:@"selectedDate out of range" format:@""];
+        return
+        // caused wierd bugs and crashes
+//        [NSException raise:@"selectedDate out of range" format:@""];
     }
     NSDate *targetDate = date;
     targetDate = [date fs_daysFrom:_minimumDate] < 0 ? _minimumDate.copy : date;
