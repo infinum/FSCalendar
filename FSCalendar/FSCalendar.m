@@ -1103,7 +1103,7 @@
         return;
     }
     if (![self isDateInRange:date]) {
-        return
+        return;
         // caused wierd bugs and crashes
 //        [NSException raise:@"selectedDate out of range" format:@""];
     }
